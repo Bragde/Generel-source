@@ -52,12 +52,66 @@ namespace Övning2._5
         public T Remove(int index)
         {
             T temp = list[index];
-            //Move all elements after index one step to the left
-            for (int i = index; i < count - 1; i++) list[i] = list[i + 1];
-            count--;
-            //Decrease collection if there are to many empty elements
-            if (length - count > buffer) Reduce();
+            if (index < count)
+            {
+                //Copy all elements after index one step to the left 
+                for (int i = index; i < count; i++) list[i] = list[i + 1];
+                count--;
+                //Decrease collection if there are to many empty elements
+                if (length - count > buffer) Reduce();
+            }
             return temp;
+        }
+
+        //Returns the count of used elements in the list
+        public int Count()
+        {
+            return count;
+        }
+
+        //Returns the value from a given index
+        public T GetValue(int index)
+        {
+            return list[index];
+        }
+
+        //Return true if a given value exists in the list
+        public bool ValueExists(T e)
+        {
+            foreach (T item in list)
+                if (e.Equals(item)) return true;
+            return false;
+        }
+
+        //Returns the first index of a given value
+        //Returns -1 if the value is not found
+        public int FirstIndexOf(T e)
+        {
+            for (int i = 0; i < count; i++)
+                if (list[i].Equals(e)) return i;
+            return -1;
+        }
+
+        //Adds elements from the passed collection to this collection
+        public void AddRange(MyCollection<T> c)
+        {
+            //Copy passed collection to a new adress
+            MyCollection<T> tmp = new MyCollection<T>();
+            tmp.length = c.length;
+            tmp.count = c.count;
+            T[] tmpLst = new T[c.count];
+            for (int i = 0; i < c.count; i++) tmpLst[i] = c.list[i];
+            tmp.list = tmpLst;
+            //Add copied collection to this collection
+            for (int i = 0; i < tmp.count; i++)
+                Add(tmp.list[i]);
+        }
+
+        //Indexmethod to make it possible to use functions like "myCollection.list[i]"
+        //from the main program
+        public T this[int index]
+        {
+            get { return list[index]; }
         }
     }
 }
